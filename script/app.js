@@ -20,4 +20,73 @@ const evenBtn = document.querySelector('.even-btn');
 
 const periodBtn = document.querySelector('.period-btn');
 
+//const allBtn = document.querySelectorAll('button');
 
+// Input output block
+
+outputPara.textContent = '0';
+
+digitsBtn.forEach((btn) => {
+  
+  btn.addEventListener('click', getDigitsInput);
+
+});
+
+const inputArr = [];
+
+function getDigitsInput(e) {
+
+  let input = Number(e.target.textContent);
+
+  inputArr.push(input);
+  
+  console.log(inputArr);
+};
+
+clearBtn.addEventListener('click', () => {
+  
+  inputArr.length = 0
+  
+  outputPara.textContent = '0';
+
+  console.log(inputArr);
+
+});
+
+digitsBtn.forEach((btn) => { 
+
+  btn.addEventListener('click', showOutput);
+
+});
+
+function showOutput() { 
+
+  let output = inputArr.join('');
+
+  console.log(output);
+
+  outputPara.textContent = output;
+
+};
+
+undoBtn.addEventListener('click', () => { 
+
+  inputArr.pop();
+
+  console.log(inputArr);
+
+  let undoString = outputPara.textContent.slice(0, outputPara.textContent.length - 1);
+  
+  console.log(undoString);
+
+  if (undoString === '') {
+
+    outputPara.textContent = '0';
+
+  } else { 
+
+    outputPara.textContent = undoString;
+
+  };
+
+});
