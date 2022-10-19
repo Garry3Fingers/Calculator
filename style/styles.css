@@ -19,24 +19,30 @@ body {
   flex-direction: column;
   border: 1px solid black;
   height: 250px;
-  /* width: 160px; */
-  padding: 15px;
+  width: 220px; 
+  padding: 20px;
+}
+
+.output-container p {
+  display: flex;
+  justify-content: flex-end;
 }
 
 p {
-  font-size: 25px;
-  text-align: right;
+  font-size: 23px;
+  /* text-align: right; */
+  /* align-self: flex-end; */
 }
 
 button {
   height: 25px;
-  width: 35px;
+  width: 38px;
 }
 
 .main-buttons-container {
   display: flex;
   height: 200px;
-  width: 160px; 
+  width: 180px; 
 }
 
 .buttons-container {

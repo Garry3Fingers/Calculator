@@ -22,7 +22,7 @@ const periodBtn = document.querySelector('.period-btn');
 
 //const allBtn = document.querySelectorAll('button');
 
-// Input output block
+// Input output block 12max
 
 outputPara.textContent = '0';
 
@@ -36,11 +36,13 @@ const inputArr = [];
 
 function getDigitsInput(e) {
 
+  let lengthOutput = outputPara.textContent.length;
+
   let input = Number(e.target.textContent);
 
-  inputArr.push(input);
-  
-  console.log(inputArr);
+  if (lengthOutput < 15) inputArr.push(input);
+
+ // console.log(inputArr);
 };
 
 clearBtn.addEventListener('click', () => {
@@ -49,7 +51,7 @@ clearBtn.addEventListener('click', () => {
   
   outputPara.textContent = '0';
 
-  console.log(inputArr);
+//  console.log(inputArr);
 
 });
 
@@ -63,9 +65,11 @@ function showOutput() {
 
   let output = inputArr.join('');
 
-  console.log(output);
+ // console.log(output);
 
   outputPara.textContent = output;
+
+ // stopAtMaxOutput();
 
 };
 
@@ -73,11 +77,11 @@ undoBtn.addEventListener('click', () => {
 
   inputArr.pop();
 
-  console.log(inputArr);
+ // console.log(inputArr);
 
   let undoString = outputPara.textContent.slice(0, outputPara.textContent.length - 1);
   
-  console.log(undoString);
+ // console.log(undoString);
 
   if (undoString === '') {
 
