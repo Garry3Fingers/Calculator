@@ -20,9 +20,9 @@ const evenBtn = document.querySelector('.even-btn');
 
 const periodBtn = document.querySelector('.period-btn');
 
-//const allBtn = document.querySelectorAll('button');
+const allBtn = document.querySelectorAll('button');
 
-// Input output block 12max
+// Input output block 
 
 outputPara.textContent = '0';
 
@@ -39,6 +39,7 @@ function getDigitsInput(e) {
   let lengthOutput = outputPara.textContent.length;
 
   let input = Number(e.target.textContent);
+  
 
   if (lengthOutput < 15) inputArr.push(input);
 
@@ -65,11 +66,9 @@ function showOutput() {
 
   let output = inputArr.join('');
 
- // console.log(output);
+  console.log(output);
 
   outputPara.textContent = output;
-
- // stopAtMaxOutput();
 
 };
 
@@ -94,3 +93,33 @@ undoBtn.addEventListener('click', () => {
   };
 
 });
+
+periodBtn.addEventListener('click', () => { 
+
+  inputArr.push('.');
+
+  showOutput();
+
+});
+
+allBtn.forEach((btn) => {
+
+  btn.addEventListener('click', checkPeriod);
+
+});
+
+function checkPeriod() { 
+
+  const isPeriod = inputArr.some((item) => item === '.');
+
+  if (isPeriod) {
+
+    periodBtn.setAttribute('disabled', '');
+
+  } else {
+
+    periodBtn.removeAttribute('disabled', '');
+
+  };
+
+};
