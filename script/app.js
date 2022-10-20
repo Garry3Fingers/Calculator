@@ -38,7 +38,7 @@ function getDigitsInput(e) {
 
   let lengthOutput = outputPara.textContent.length;
 
-  let input = Number(e.target.textContent);
+  let input = e.target.textContent;
   
 
   if (lengthOutput < 15) inputArr.push(input);
@@ -49,6 +49,8 @@ function getDigitsInput(e) {
 clearBtn.addEventListener('click', () => {
   
   inputArr.length = 0
+
+  mathOperations.numbers.length = 0;
   
   outputPara.textContent = '0';
 
@@ -67,6 +69,8 @@ function showOutput() {
   let output = inputArr.join('');
 
   console.log(output);
+
+  console.log(inputArr);
 
   outputPara.textContent = output;
 
@@ -121,5 +125,69 @@ function checkPeriod() {
     periodBtn.removeAttribute('disabled', '');
 
   };
+
+};
+
+// Math operations
+
+const mathOperations = {
+
+  numbers: [],
+
+  sum() { 
+
+    const result = this.numbers.reduce((total, number) => {
+      return total + number;
+    }, 0);
+
+    outputPara.textContent = `${result}`;
+
+  },
+
+
+
+};
+
+
+plusBtn.addEventListener('click', addPlus);
+
+function addPlus() { 
+
+  let number = Number(inputArr.join(''));
+
+  mathOperations.numbers.push(number);
+
+  console.log(mathOperations.numbers);
+
+  inputArr.length = 0;
+
+  inputArr.push(number, ' + ');
+
+  showOutput();
+
+};
+
+evenBtn.addEventListener('click', calculateOperation);
+
+function calculateOperation() { 
+
+  const operator = inputArr.find((item) => item === ' + ');
+
+  console.log(operator);
+
+  switch (true) {
+
+    case (operator === ' + '):
+      mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
+      console.log(mathOperations.numbers);
+      mathOperations.sum();
+      break;
+    
+    
+  };
+
+  inputArr.length = 0
+
+  mathOperations.numbers.length = 0;
 
 };
