@@ -64,6 +64,21 @@ digitsBtn.forEach((btn) => {
 
 });
 
+const output = {
+
+  input: [],
+  
+  operator: [],
+
+  showOutput() {
+
+    outputPara.textContent = `${this.input[0]} ${this.operator} ${this.input[1]}`;
+
+   },
+
+};
+
+
 function showOutput() { 
 
   let output = inputArr.join('');
@@ -72,7 +87,7 @@ function showOutput() {
 
   console.log(inputArr);
 
-  outputPara.textContent = output;
+  outputPara.textContent = `${output} `;
 
 };
 
@@ -134,13 +149,15 @@ const mathOperations = {
 
   numbers: [],
 
+  result: 0,
+
   sum() { 
 
-    const result = this.numbers.reduce((total, number) => {
+    this.result = this.numbers.reduce((total, number) => {
       return total + number;
     }, 0);
 
-    outputPara.textContent = `${result}`;
+    outputPara.textContent = `${this.result}`;
 
   },
 
@@ -153,6 +170,13 @@ plusBtn.addEventListener('click', addPlus);
 
 function addPlus() { 
 
+  // if ((inputArr[1] === ' + ') && (inputArr[2] === typeof ('number'))) {
+
+  //   mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
+  //   mathOperations.sum();
+
+  // };
+
   let number = Number(inputArr.join(''));
 
   mathOperations.numbers.push(number);
@@ -163,13 +187,17 @@ function addPlus() {
 
   inputArr.push(number, ' + ');
 
+  //const checkPlus = inputArr.some((item) => item === ' + ');
+
+  
+
   showOutput();
 
 };
 
-evenBtn.addEventListener('click', calculateOperation);
+evenBtn.addEventListener('click', calculateEvenOperation);
 
-function calculateOperation() { 
+function calculateEvenOperation() { 
 
   const operator = inputArr.find((item) => item === ' + ');
 
@@ -186,7 +214,11 @@ function calculateOperation() {
     
   };
 
-  inputArr.length = 0
+  inputArr.length = 0;
+
+  inputArr.push(mathOperations.result);
+
+  console.log(inputArr);
 
   mathOperations.numbers.length = 0;
 
