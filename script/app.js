@@ -38,7 +38,7 @@ function getDigitsInput(e) {
 
   let lengthOutput = outputPara.textContent.length;
 
-  let input = e.target.textContent;
+  let input = Number(e.target.textContent);
   
 
   if (lengthOutput < 15) inputArr.push(input);
@@ -64,21 +64,6 @@ digitsBtn.forEach((btn) => {
 
 });
 
-const output = {
-
-  input: [],
-  
-  operator: [],
-
-  showOutput() {
-
-    outputPara.textContent = `${this.input[0]} ${this.operator} ${this.input[1]}`;
-
-   },
-
-};
-
-
 function showOutput() { 
 
   let output = inputArr.join('');
@@ -87,7 +72,7 @@ function showOutput() {
 
   console.log(inputArr);
 
-  outputPara.textContent = `${output} `;
+  outputPara.textContent = output;
 
 };
 
@@ -151,7 +136,7 @@ const mathOperations = {
 
   result: 0,
 
-  sum() { 
+  addition() { 
 
     this.result = this.numbers.reduce((total, number) => {
       return total + number;
@@ -170,25 +155,33 @@ plusBtn.addEventListener('click', addPlus);
 
 function addPlus() { 
 
-  // if ((inputArr[1] === ' + ') && (inputArr[2] === typeof ('number'))) {
+  if ((inputArr[1] === ' + ') && (typeof inputArr[2] === 'number')) {
 
-  //   mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
-  //   mathOperations.sum();
+    mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
 
-  // };
+    mathOperations.addition();
 
-  let number = Number(inputArr.join(''));
+    inputArr.length = 0;
 
-  mathOperations.numbers.push(number);
+    inputArr.push(mathOperations.result, ' + ');
 
-  console.log(mathOperations.numbers);
+    mathOperations.numbers.length = 0;
 
-  inputArr.length = 0;
+    mathOperations.numbers.push(mathOperations.result);
 
-  inputArr.push(number, ' + ');
+  } else {
 
-  //const checkPlus = inputArr.some((item) => item === ' + ');
+    let number = Number(inputArr.join(''));
 
+    mathOperations.numbers.push(number);
+
+    console.log(mathOperations.numbers);
+
+    inputArr.length = 0;
+
+    inputArr.push(number, ' + ');
+
+  }
   
 
   showOutput();
@@ -208,7 +201,7 @@ function calculateEvenOperation() {
     case (operator === ' + '):
       mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
       console.log(mathOperations.numbers);
-      mathOperations.sum();
+      mathOperations.addition();
       break;
     
     
