@@ -84,7 +84,8 @@ undoBtn.addEventListener('click', () => {
 
  // console.log(inputArr);
 
-  let undoString = outputPara.textContent.slice(0, outputPara.textContent.length - 1);
+  let undoString = outputPara.textContent.slice(0,
+    outputPara.textContent.length - 1);
   
  // console.log(undoString);
 
@@ -168,6 +169,16 @@ const mathOperations = {
 
   },
 
+  multiplication() { 
+
+    this.result = this.numbers.reduce((firstNumber, secondNumber) => {
+      return roundToThree(firstNumber * secondNumber);
+    });
+
+    outputPara.textContent = `${this.result}`;
+
+  },
+
 };
 
 // https://stackoverflow.com/questions/11832914/how-to-round-to-at-most-2-decimal-places-if-necessary
@@ -175,7 +186,6 @@ const mathOperations = {
 function roundToThree(num) {
   return Number(Math.round(num + "e+3") + "e-3");
 };
-
 
 mathBtn.forEach((btn) => {
 
@@ -203,6 +213,10 @@ function performFirstOperation(e) {
 
       inputArr.push(operand, ' ÷ ');
 
+    } else if (operator === '*') {
+    
+      inputArr.push(operand, ' x ');
+
     } else {
 
       inputArr.push(operand, ` ${operator} `);
@@ -221,11 +235,10 @@ mathBtn.forEach((btn) => {
 
 });
 
-
 function performSecondOperation(e) { 
 
   const operatorInArr = inputArr.find((operator) => operator === ' + ' ||
-    operator === ' - ' || operator === ' ÷ ');
+    operator === ' - ' || operator === ' ÷ ' || operator === ' x ');
   
   let rightOperand = typeof inputArr[2] === 'number';
 
@@ -249,6 +262,11 @@ function performSecondOperation(e) {
       mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
       mathOperations.division();
       break;
+    
+    case ((operatorInArr === ' x ') && rightOperand):
+      mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
+      mathOperations.multiplication();
+      break;
 
     default:
       return;
@@ -260,6 +278,10 @@ function performSecondOperation(e) {
 
     inputArr.push(mathOperations.result, ' ÷ ');
 
+  } else if (operator === '*') {
+  
+    inputArr.push(mathOperations.result, ' x ');
+  
   } else {
 
     inputArr.push(mathOperations.result, ` ${operator} `);
@@ -276,14 +298,12 @@ function performSecondOperation(e) {
 
 };
 
-
-
 evenBtn.addEventListener('click', calculateEvenOperation);
 
 function calculateEvenOperation() { 
 
   const operator = inputArr.find((item) => item === ' + ' ||
-    item === ' - ' || item === ' ÷ ');
+    item === ' - ' || item === ' ÷ ' || item === ' x ');
 
   console.log(operator);
 
@@ -305,6 +325,12 @@ function calculateEvenOperation() {
       mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
       console.log(mathOperations.numbers);
       mathOperations.division();
+      break;
+    
+    case (operator === ' x '):
+      mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
+      console.log(mathOperations.numbers);
+      mathOperations.multiplication();
       break;
     
   };
