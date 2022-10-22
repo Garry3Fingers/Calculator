@@ -141,7 +141,7 @@ const mathOperations = {
   addition() { 
 
     this.result = this.numbers.reduce((total, number) => {
-      return roundToTwo(total + number);
+      return roundToThree(total + number);
     }, 0);
 
     outputPara.textContent = `${this.result}`;
@@ -151,18 +151,29 @@ const mathOperations = {
   subtraction() {
 
     this.result = this.numbers.reduce((firstNumber, secondNumber) => { 
-      return roundToTwo(firstNumber - secondNumber);
+      return roundToThree(firstNumber - secondNumber);
     });
 
     outputPara.textContent = `${this.result}`;
 
-   },
+  },
+  
+  division() { 
+
+    this.result = this.numbers.reduce((firstNumber, secondNumber) => {
+      return roundToThree(firstNumber / secondNumber);
+    });
+
+    outputPara.textContent = `${this.result}`;
+
+  },
 
 };
 
 // https://stackoverflow.com/questions/11832914/how-to-round-to-at-most-2-decimal-places-if-necessary
-function roundToTwo(num) {
-  return +(Math.round(num + "e+3") + "e-3");
+// https://www.jacklmoore.com/notes/rounding-in-javascript/
+function roundToThree(num) {
+  return Number(Math.round(num + "e+3") + "e-3");
 };
 
 
@@ -174,10 +185,11 @@ mathBtn.forEach((btn) => {
  
 function performFirstOperation(e) { 
 
-  const checkOperator = inputArr.some((item) => item[1] === '-' ||
-    item[1] === '+');
+  let checkOperator = !inputArr[1];
 
-  if (!checkOperator) {
+  console.log(checkOperator);
+  
+  if (checkOperator) {
 
     let operator = e.target.value;
 
@@ -187,7 +199,15 @@ function performFirstOperation(e) {
     
     inputArr.length = 0;
 
-    inputArr.push(operand, ` ${operator} `);
+    if (operator === '/') {
+
+      inputArr.push(operand, ' ÷ ');
+
+    } else {
+
+      inputArr.push(operand, ` ${operator} `);
+
+    };
 
   }; 
 
@@ -205,7 +225,7 @@ mathBtn.forEach((btn) => {
 function performSecondOperation(e) { 
 
   const operatorInArr = inputArr.find((operator) => operator === ' + ' ||
-    operator === ' - ');
+    operator === ' - ' || operator === ' ÷ ');
   
   let rightOperand = typeof inputArr[2] === 'number';
 
@@ -225,13 +245,26 @@ function performSecondOperation(e) {
       mathOperations.subtraction();
       break;
     
+    case ((operatorInArr === ' ÷ ') && rightOperand):
+      mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
+      mathOperations.division();
+      break;
+
     default:
       return;
   };
 
   inputArr.length = 0;
 
-  inputArr.push(mathOperations.result, ` ${operator} `);
+  if (operator === '/') {
+
+    inputArr.push(mathOperations.result, ' ÷ ');
+
+  } else {
+
+    inputArr.push(mathOperations.result, ` ${operator} `);
+
+  };
 
   mathOperations.numbers.length = 0;
 
@@ -250,7 +283,7 @@ evenBtn.addEventListener('click', calculateEvenOperation);
 function calculateEvenOperation() { 
 
   const operator = inputArr.find((item) => item === ' + ' ||
-    item === ' - ');
+    item === ' - ' || item === ' ÷ ');
 
   console.log(operator);
 
@@ -266,6 +299,12 @@ function calculateEvenOperation() {
       mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
       console.log(mathOperations.numbers);
       mathOperations.subtraction();
+      break;
+    
+    case (operator === ' ÷ '):
+      mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
+      console.log(mathOperations.numbers);
+      mathOperations.division();
       break;
     
   };
