@@ -141,7 +141,7 @@ const mathOperations = {
   addition() { 
 
     this.result = this.numbers.reduce((total, number) => {
-      return total + number;
+      return roundToTwo(total + number);
     }, 0);
 
     outputPara.textContent = `${this.result}`;
@@ -151,12 +151,47 @@ const mathOperations = {
   subtraction() {
 
     this.result = this.numbers.reduce((firstNumber, secondNumber) => { 
-      return firstNumber - secondNumber;
+      return roundToTwo(firstNumber - secondNumber);
     });
 
     outputPara.textContent = `${this.result}`;
 
    },
+
+};
+
+// https://stackoverflow.com/questions/11832914/how-to-round-to-at-most-2-decimal-places-if-necessary
+function roundToTwo(num) {
+  return +(Math.round(num + "e+3") + "e-3");
+};
+
+
+mathBtn.forEach((btn) => {
+
+  btn.addEventListener('click', performFirstOperation);
+
+});
+ 
+function performFirstOperation(e) { 
+
+  const checkOperator = inputArr.some((item) => item[1] === '-' ||
+    item[1] === '+');
+
+  if (!checkOperator) {
+
+    let operator = e.target.value;
+
+    let operand = Number(inputArr.join(''));
+
+    mathOperations.numbers.push(operand);
+    
+    inputArr.length = 0;
+
+    inputArr.push(operand, ` ${operator} `);
+
+  }; 
+
+  showOutput();
 
 };
 
@@ -171,8 +206,6 @@ function performSecondOperation(e) {
 
   const operatorInArr = inputArr.find((operator) => operator === ' + ' ||
     operator === ' - ');
-  
-  //let leftOperand = Number(inputArr.join(''));
   
   let rightOperand = typeof inputArr[2] === 'number';
 
@@ -192,10 +225,6 @@ function performSecondOperation(e) {
       mathOperations.subtraction();
       break;
     
-    // case (operator === '+'):
-    //   mathOperations.numbers.push(leftOperand);
-    //   inputArr.length = 0;
-    //   inputArr.push(leftOperand, ' + ');
     default:
       return;
   };
@@ -210,102 +239,11 @@ function performSecondOperation(e) {
 
   console.log(operator);
 
-
   showOutput();
 
 };
 
-const secondMathOperator = {
 
-
-
-};
-
-plusBtn.addEventListener('click', addPlus);
-
-function addPlus() { 
-
-  // if ((inputArr[1] === ' + ')  && (typeof inputArr[2] === 'number')) {
-
-  //   mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
-
-  //   mathOperations.addition();
-
-  //   inputArr.length = 0;
-
-  //   inputArr.push(mathOperations.result, ' + ');
-
-  //   mathOperations.numbers.length = 0;
-
-  //   mathOperations.numbers.push(mathOperations.result);
-
-  // } else {
-  
-  if (!inputArr[1]) {
-
-    let number = Number(inputArr.join(''));
-
-    mathOperations.numbers.push(number);
-
-    console.log(mathOperations.numbers);
-
-    inputArr.length = 0;
-
-    inputArr.push(number, ' + ');
-  } else { 
-    
-    return;
-    
-  };
-  // }
-  
-  showOutput();
-
-};
-
-minusBtn.addEventListener('click', addMinus);
-
-function addMinus() {
-
-  // if ((inputArr[1] === ' - ') && (typeof inputArr[2] === 'number')) {
-
-  //   mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
-
-  //   mathOperations.subtraction();
-
-  //   inputArr.length = 0;
-
-  //   inputArr.push(mathOperations.result, ' - ');
-
-  //   mathOperations.numbers.length = 0;
-
-  //   mathOperations.numbers.push(mathOperations.result);
-
-  // } else {
-
-  if (!inputArr[1]) {
-
-    let number = Number(inputArr.join(''));
-
-    mathOperations.numbers.push(number);
-
-    console.log(mathOperations.numbers);
-
-    inputArr.length = 0;
-
-    inputArr.push(number, ` ${minusBtn.value} `);
-
-  } else {
-
-    return
-
-  };
-
-  // }
-
-  showOutput();
-
- };
 
 evenBtn.addEventListener('click', calculateEvenOperation);
 
