@@ -22,6 +22,8 @@ const periodBtn = document.querySelector('.period-btn');
 
 const allBtn = document.querySelectorAll('button');
 
+const mathBtn = document.querySelectorAll('.second-operation');
+
 // Input output block 
 
 outputPara.textContent = '0';
@@ -146,30 +148,100 @@ const mathOperations = {
 
   },
 
+  subtraction() {
 
+    this.result = this.numbers.reduce((firstNumber, secondNumber) => { 
+      return firstNumber - secondNumber;
+    });
+
+    outputPara.textContent = `${this.result}`;
+
+   },
 
 };
 
+mathBtn.forEach((btn) => { 
+
+  btn.addEventListener('click', performSecondOperation);
+
+});
+
+
+function performSecondOperation(e) { 
+
+  const operatorInArr = inputArr.find((operator) => operator === ' + ' ||
+    operator === ' - ');
+  
+  //let leftOperand = Number(inputArr.join(''));
+  
+  let rightOperand = typeof inputArr[2] === 'number';
+
+  let operator = e.target.value;
+
+  console.log(operator);
+
+  switch (true) { 
+
+    case ((operatorInArr === ' + ') && rightOperand):
+      mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
+      mathOperations.addition();
+      break;
+    
+    case ((operatorInArr === ' - ') && rightOperand):
+      mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
+      mathOperations.subtraction();
+      break;
+    
+    // case (operator === '+'):
+    //   mathOperations.numbers.push(leftOperand);
+    //   inputArr.length = 0;
+    //   inputArr.push(leftOperand, ' + ');
+    default:
+      return;
+  };
+
+  inputArr.length = 0;
+
+  inputArr.push(mathOperations.result, ` ${operator} `);
+
+  mathOperations.numbers.length = 0;
+
+  mathOperations.numbers.push(mathOperations.result);
+
+  console.log(operator);
+
+
+  showOutput();
+
+};
+
+const secondMathOperator = {
+
+
+
+};
 
 plusBtn.addEventListener('click', addPlus);
 
 function addPlus() { 
 
-  if ((inputArr[1] === ' + ') && (typeof inputArr[2] === 'number')) {
+  // if ((inputArr[1] === ' + ')  && (typeof inputArr[2] === 'number')) {
 
-    mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
+  //   mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
 
-    mathOperations.addition();
+  //   mathOperations.addition();
 
-    inputArr.length = 0;
+  //   inputArr.length = 0;
 
-    inputArr.push(mathOperations.result, ' + ');
+  //   inputArr.push(mathOperations.result, ' + ');
 
-    mathOperations.numbers.length = 0;
+  //   mathOperations.numbers.length = 0;
 
-    mathOperations.numbers.push(mathOperations.result);
+  //   mathOperations.numbers.push(mathOperations.result);
 
-  } else {
+  // } else {
+  
+  if (!inputArr[1]) {
 
     let number = Number(inputArr.join(''));
 
@@ -180,19 +252,67 @@ function addPlus() {
     inputArr.length = 0;
 
     inputArr.push(number, ' + ');
-
-  }
+  } else { 
+    
+    return;
+    
+  };
+  // }
   
-
   showOutput();
 
 };
+
+minusBtn.addEventListener('click', addMinus);
+
+function addMinus() {
+
+  // if ((inputArr[1] === ' - ') && (typeof inputArr[2] === 'number')) {
+
+  //   mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
+
+  //   mathOperations.subtraction();
+
+  //   inputArr.length = 0;
+
+  //   inputArr.push(mathOperations.result, ' - ');
+
+  //   mathOperations.numbers.length = 0;
+
+  //   mathOperations.numbers.push(mathOperations.result);
+
+  // } else {
+
+  if (!inputArr[1]) {
+
+    let number = Number(inputArr.join(''));
+
+    mathOperations.numbers.push(number);
+
+    console.log(mathOperations.numbers);
+
+    inputArr.length = 0;
+
+    inputArr.push(number, ` ${minusBtn.value} `);
+
+  } else {
+
+    return
+
+  };
+
+  // }
+
+  showOutput();
+
+ };
 
 evenBtn.addEventListener('click', calculateEvenOperation);
 
 function calculateEvenOperation() { 
 
-  const operator = inputArr.find((item) => item === ' + ');
+  const operator = inputArr.find((item) => item === ' + ' ||
+    item === ' - ');
 
   console.log(operator);
 
@@ -204,6 +324,11 @@ function calculateEvenOperation() {
       mathOperations.addition();
       break;
     
+    case (operator === ' - '):
+      mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
+      console.log(mathOperations.numbers);
+      mathOperations.subtraction();
+      break;
     
   };
 
