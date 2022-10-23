@@ -26,110 +26,124 @@ const mathBtn = document.querySelectorAll('.second-operation');
 
 // Input output block 
 
-outputPara.textContent = '0';
+const output = {
 
-digitsBtn.forEach((btn) => {
+  inputArr: [],
+
+  showOutput() {
+
+    outputPara.textContent = `${this.inputArr.join('')}`;
+
+  },
+
+  addPeriod() {
+
+    this.inputArr.push('.');
+
+    this.showOutput();
+
+  },
   
-  btn.addEventListener('click', getDigitsInput);
+  checkPeriod() { 
 
-});
+    const isPeriod = this.inputArr.some((item) => item === '.');
 
-const inputArr = [];
+    if (isPeriod) {
 
-function getDigitsInput(e) {
+      periodBtn.setAttribute('disabled', '');
 
-  let lengthOutput = outputPara.textContent.length;
+    } else {
 
-  let input = Number(e.target.textContent);
-  
+      periodBtn.removeAttribute('disabled', '');
+      
+    };
 
-  if (lengthOutput < 15) inputArr.push(input);
+  },
 
- // console.log(inputArr);
+  clearAll() { 
+
+    this.inputArr.length = 0;
+
+    mathOperations.numbers.length = 0;
+
+    outputPara.textContent = '0';
+
+  },
+
+  undoLastCharacter() { 
+
+    this.inputArr.pop();
+
+    if (this.inputArr.toString() === '') {
+
+      outputPara.textContent = '0';
+
+    } else { 
+
+      outputPara.textContent = outputPara.textContent.slice(0,
+        outputPara.textContent.length - 1);
+
+    };
+
+  },
+
+  getDigits(e) {
+
+    let lengthOutput = outputPara.textContent.length;
+
+    if (lengthOutput < 15) output.inputArr.push(Number(e.target.textContent));
+
+   },
+
 };
 
-clearBtn.addEventListener('click', () => {
-  
-  inputArr.length = 0
+digitsBtn.forEach((btn) => { 
 
-  mathOperations.numbers.length = 0;
-  
-  outputPara.textContent = '0';
+  btn.addEventListener('click', (e) => { 
 
-//  console.log(inputArr);
+    output.getDigits(e);
+
+  });
 
 });
 
 digitsBtn.forEach((btn) => { 
 
-  btn.addEventListener('click', showOutput);
-
-});
-
-function showOutput() { 
-
-  let output = inputArr.join('');
-
-  console.log(output);
-
-  console.log(inputArr);
-
-  outputPara.textContent = output;
-
-};
-
-undoBtn.addEventListener('click', () => { 
-
-  inputArr.pop();
-
- // console.log(inputArr);
-
-  let undoString = outputPara.textContent.slice(0,
-    outputPara.textContent.length - 1);
+  btn.addEventListener('click', () => {
+    
+    output.showOutput();
   
- // console.log(undoString);
-
-  if (undoString === '') {
-
-    outputPara.textContent = '0';
-
-  } else { 
-
-    outputPara.textContent = undoString;
-
-  };
+  });
 
 });
 
 periodBtn.addEventListener('click', () => { 
 
-  inputArr.push('.');
-
-  showOutput();
+  output.addPeriod();
 
 });
 
-allBtn.forEach((btn) => {
+allBtn.forEach((btn) => { 
 
-  btn.addEventListener('click', checkPeriod);
+  btn.addEventListener('click', () => { 
+
+    output.checkPeriod();
+
+  });
 
 });
 
-function checkPeriod() { 
+clearBtn.addEventListener('click', () => { 
 
-  const isPeriod = inputArr.some((item) => item === '.');
+  output.clearAll();
 
-  if (isPeriod) {
+});
 
-    periodBtn.setAttribute('disabled', '');
+undoBtn.addEventListener('click', () => { 
 
-  } else {
+  output.undoLastCharacter();
 
-    periodBtn.removeAttribute('disabled', '');
-
-  };
-
-};
+});
 
 // Math operations
 
@@ -184,7 +198,9 @@ const mathOperations = {
 // https://stackoverflow.com/questions/11832914/how-to-round-to-at-most-2-decimal-places-if-necessary
 // https://www.jacklmoore.com/notes/rounding-in-javascript/
 function roundToThree(num) {
+
   return Number(Math.round(num + "e+3") + "e-3");
+
 };
 
 mathBtn.forEach((btn) => {
@@ -195,7 +211,7 @@ mathBtn.forEach((btn) => {
  
 function performFirstOperation(e) { 
 
-  let checkOperator = !inputArr[1];
+  let checkOperator = !output.inputArr[1];
 
   console.log(checkOperator);
   
@@ -203,29 +219,29 @@ function performFirstOperation(e) {
 
     let operator = e.target.value;
 
-    let operand = Number(inputArr.join(''));
+    let operand = Number(output.inputArr.join(''));
 
     mathOperations.numbers.push(operand);
     
-    inputArr.length = 0;
+    output.inputArr.length = 0;
 
     if (operator === '/') {
 
-      inputArr.push(operand, ' ÷ ');
+      output.inputArr.push(operand, ' ÷ ');
 
     } else if (operator === '*') {
     
-      inputArr.push(operand, ' x ');
+      output.inputArr.push(operand, ' x ');
 
     } else {
 
-      inputArr.push(operand, ` ${operator} `);
+      output.inputArr.push(operand, ` ${operator} `);
 
     };
 
   }; 
 
-  showOutput();
+  output.showOutput();
 
 };
 
@@ -237,10 +253,10 @@ mathBtn.forEach((btn) => {
 
 function performSecondOperation(e) { 
 
-  const operatorInArr = inputArr.find((operator) => operator === ' + ' ||
+  const operatorInArr = output.inputArr.find((operator) => operator === ' + ' ||
     operator === ' - ' || operator === ' ÷ ' || operator === ' x ');
   
-  let rightOperand = typeof inputArr[2] === 'number';
+  let rightOperand = typeof output.inputArr[2] === 'number';
 
   let operator = e.target.value;
 
@@ -249,22 +265,22 @@ function performSecondOperation(e) {
   switch (true) { 
 
     case ((operatorInArr === ' + ') && rightOperand):
-      mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
+      mathOperations.numbers.push(Number(output.inputArr.slice(2).join('')));
       mathOperations.addition();
       break;
     
     case ((operatorInArr === ' - ') && rightOperand):
-      mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
+      mathOperations.numbers.push(Number(output.inputArr.slice(2).join('')));
       mathOperations.subtraction();
       break;
     
     case ((operatorInArr === ' ÷ ') && rightOperand):
-      mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
+      mathOperations.numbers.push(Number(output.inputArr.slice(2).join('')));
       mathOperations.division();
       break;
     
     case ((operatorInArr === ' x ') && rightOperand):
-      mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
+      mathOperations.numbers.push(Number(output.inputArr.slice(2).join('')));
       mathOperations.multiplication();
       break;
 
@@ -272,19 +288,19 @@ function performSecondOperation(e) {
       return;
   };
 
-  inputArr.length = 0;
+  output.inputArr.length = 0;
 
   if (operator === '/') {
 
-    inputArr.push(mathOperations.result, ' ÷ ');
+    output.inputArr.push(mathOperations.result, ' ÷ ');
 
   } else if (operator === '*') {
   
-    inputArr.push(mathOperations.result, ' x ');
+    output.inputArr.push(mathOperations.result, ' x ');
   
   } else {
 
-    inputArr.push(mathOperations.result, ` ${operator} `);
+    output.inputArr.push(mathOperations.result, ` ${operator} `);
 
   };
 
@@ -294,7 +310,7 @@ function performSecondOperation(e) {
 
   console.log(operator);
 
-  showOutput();
+  output.showOutput();
 
 };
 
@@ -302,7 +318,7 @@ evenBtn.addEventListener('click', calculateEvenOperation);
 
 function calculateEvenOperation() { 
 
-  const operator = inputArr.find((item) => item === ' + ' ||
+  const operator = output.inputArr.find((item) => item === ' + ' ||
     item === ' - ' || item === ' ÷ ' || item === ' x ');
 
   console.log(operator);
@@ -310,36 +326,36 @@ function calculateEvenOperation() {
   switch (true) {
 
     case (operator === ' + '):
-      mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
+      mathOperations.numbers.push(Number(output.inputArr.slice(2).join('')));
       console.log(mathOperations.numbers);
       mathOperations.addition();
       break;
     
     case (operator === ' - '):
-      mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
+      mathOperations.numbers.push(Number(output.inputArr.slice(2).join('')));
       console.log(mathOperations.numbers);
       mathOperations.subtraction();
       break;
     
     case (operator === ' ÷ '):
-      mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
+      mathOperations.numbers.push(Number(output.inputArr.slice(2).join('')));
       console.log(mathOperations.numbers);
       mathOperations.division();
       break;
     
     case (operator === ' x '):
-      mathOperations.numbers.push(Number(inputArr.slice(2).join('')));
+      mathOperations.numbers.push(Number(output.inputArr.slice(2).join('')));
       console.log(mathOperations.numbers);
       mathOperations.multiplication();
       break;
     
   };
 
-  inputArr.length = 0;
+  output.inputArr.length = 0;
 
-  inputArr.push(mathOperations.result);
+  output.inputArr.push(mathOperations.result);
 
-  console.log(inputArr);
+  console.log(output.inputArr);
 
   mathOperations.numbers.length = 0;
 
