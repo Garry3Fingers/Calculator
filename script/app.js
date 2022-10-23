@@ -30,6 +30,24 @@ const output = {
 
   inputArr: [],
 
+  findOperator() {
+
+    const operator = this.inputArr.find((item) => item === ' + ' ||
+      item === ' - ' || item === ' ÷ ' || item === ' x ');
+
+    return operator;
+    
+  },
+  
+  checkOperator() {
+
+    const operator = this.inputArr.some((operator) => operator === ' + ' ||
+      operator === ' - ' || operator === ' ÷ ' || operator === ' x ');
+
+    return operator;
+    
+   },
+
   showOutput() {
 
     outputPara.textContent = `${this.inputArr.join('')}`;
@@ -91,7 +109,7 @@ const output = {
 
     let lengthOutput = outputPara.textContent.length;
 
-    if (lengthOutput < 15) output.inputArr.push(Number(e.target.textContent));
+    if (lengthOutput < 15) this.inputArr.push(Number(e.target.textContent));
 
    },
 
@@ -210,13 +228,10 @@ mathBtn.forEach((btn) => {
 });
  
 function performFirstOperation(e) { 
-
- // let checkOperator = !output.inputArr[1];
   
-  const checkOperator = output.inputArr.some((operator) => operator === ' + ' ||
-    operator === ' - ' || operator === ' ÷ ' || operator === ' x ');
+  const checkOperator = output.checkOperator();
 
-  console.log(checkOperator);
+  console.log(!checkOperator);
   
   if (!checkOperator) {
 
@@ -256,8 +271,7 @@ mathBtn.forEach((btn) => {
 
 function performSecondOperation(e) { 
 
-  const operatorInArr = output.inputArr.find((operator) => operator === ' + ' ||
-    operator === ' - ' || operator === ' ÷ ' || operator === ' x ');
+  const operatorInArr = output.findOperator();
   
   let rightOperand = typeof output.inputArr[2] === 'number';
 
@@ -321,8 +335,7 @@ evenBtn.addEventListener('click', calculateEvenOperation);
 
 function calculateEvenOperation() { 
 
-  const operator = output.inputArr.find((item) => item === ' + ' ||
-    item === ' - ' || item === ' ÷ ' || item === ' x ');
+  const operator = output.findOperator();
 
   console.log(operator);
 
