@@ -111,6 +111,10 @@ const output = {
 
     this.inputArr.pop();
 
+    mathOperations.numbers.pop();
+
+    console.log(`undo: ${this.inputArr} number: ${mathOperations.numbers}`);
+
     if (this.inputArr.toString() === '') {
 
       outputPara.textContent = '0';
@@ -393,25 +397,25 @@ function calculateEvenOperation() {
 
     case (operator === ' + '):
       mathOperations.numbers.push(Number(output.inputArr.slice(2).join('')));
-      console.log(mathOperations.numbers);
+      console.log(` even math: ${mathOperations.numbers}`);
       mathOperations.addition();
       break;
     
     case (operator === ' - '):
       mathOperations.numbers.push(Number(output.inputArr.slice(2).join('')));
-      console.log(mathOperations.numbers);
+      console.log(` even math: ${mathOperations.numbers}`);
       mathOperations.subtraction();
       break;
     
     case (operator === ' ÷ '):
       mathOperations.numbers.push(Number(output.inputArr.slice(2).join('')));
-      console.log(mathOperations.numbers);
+      console.log(` even math: ${mathOperations.numbers}`);
       mathOperations.division();
       break;
     
     case (operator === ' x '):
       mathOperations.numbers.push(Number(output.inputArr.slice(2).join('')));
-      console.log(mathOperations.numbers);
+      console.log(` even math: ${mathOperations.numbers}`);
       mathOperations.multiplication();
       break;
     
@@ -421,7 +425,7 @@ function calculateEvenOperation() {
 
   output.inputArr.push(mathOperations.result);
 
-  console.log(output.inputArr);
+  console.log(`even: ${output.inputArr}`);
 
   mathOperations.numbers.length = 0;
 
