@@ -22,7 +22,7 @@ const periodBtn = document.querySelector('.period-btn');
 
 const allBtn = document.querySelectorAll('button');
 
-const mathBtn = document.querySelectorAll('.second-operation');
+const mathBtn = document.querySelectorAll('.operation-btn');
 
 // Input output block 
 
@@ -56,7 +56,19 @@ const output = {
 
   addPeriod() {
 
-    this.inputArr.push('.');
+    if (mathOperations.evenState) {
+
+      this.inputArr.length = 0;
+      
+      mathOperations.evenState = false;
+
+      this.inputArr.push(0, '.');
+
+    } else {
+
+      this.inputArr.push('.');
+    
+    };
 
     this.showOutput();
 
@@ -121,6 +133,20 @@ digitsBtn.forEach((btn) => {
 
     output.getDigits(e);
 
+    if (mathOperations.evenState) { 
+
+      mathOperations.evenState = false;
+
+      output.inputArr.length = 0;
+
+      mathOperations.numbers.length = 0;
+
+      output.inputArr.push(Number(e.target.textContent));
+
+      output.showOutput()
+
+    };
+
   });
 
 });
@@ -163,6 +189,20 @@ undoBtn.addEventListener('click', () => {
 
 });
 
+mathBtn.forEach((btn) => { 
+  
+  btn.addEventListener('click', () => { 
+
+    if (mathOperations.evenState) { 
+
+      mathOperations.evenState = false;
+
+    };
+
+  });
+
+});
+
 // Math operations
 
 const mathOperations = {
@@ -170,6 +210,8 @@ const mathOperations = {
   numbers: [],
 
   result: 0,
+
+  evenState: false,
 
   addition() { 
 
@@ -374,5 +416,7 @@ function calculateEvenOperation() {
   console.log(output.inputArr);
 
   mathOperations.numbers.length = 0;
+
+  mathOperations.evenState = true;
 
 };
