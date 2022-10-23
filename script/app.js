@@ -64,6 +64,11 @@ const output = {
 
       this.inputArr.push(0, '.');
 
+    } else if (this.inputArr.toString() === '' ||
+      this.inputArr[0] === 0) {
+      
+      this.inputArr.push(0, '.');
+
     } else {
 
       this.inputArr.push('.');
@@ -91,6 +96,8 @@ const output = {
   },
 
   clearAll() { 
+
+    periodBtn.removeAttribute('disabled', '');
 
     this.inputArr.length = 0;
 
@@ -121,7 +128,8 @@ const output = {
 
     let lengthOutput = outputPara.textContent.length;
 
-    if (lengthOutput < 15) this.inputArr.push(Number(e.target.textContent));
+    if (lengthOutput < 15) this.inputArr.push(Number
+      (e.target.textContent));
 
    },
 
