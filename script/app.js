@@ -211,11 +211,14 @@ mathBtn.forEach((btn) => {
  
 function performFirstOperation(e) { 
 
-  let checkOperator = !output.inputArr[1];
+ // let checkOperator = !output.inputArr[1];
+  
+  const checkOperator = output.inputArr.some((operator) => operator === ' + ' ||
+    operator === ' - ' || operator === ' ÷ ' || operator === ' x ');
 
   console.log(checkOperator);
   
-  if (checkOperator) {
+  if (!checkOperator) {
 
     let operator = e.target.value;
 
