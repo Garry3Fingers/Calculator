@@ -391,44 +391,60 @@ function calculateEvenOperation() {
 
   const operator = output.findOperator();
 
-  console.log(operator);
+  if (!operator || (output.inputArr[2] === undefined)) {
 
-  switch (true) {
+    if (output.inputArr[1]) {
+      
+      output.inputArr.pop();
 
-    case (operator === ' + '):
-      mathOperations.numbers.push(Number(output.inputArr.slice(2).join('')));
-      console.log(` even math: ${mathOperations.numbers}`);
-      mathOperations.addition();
-      break;
+      mathOperations.numbers.length = 0;
+
+      output.showOutput();
     
-    case (operator === ' - '):
-      mathOperations.numbers.push(Number(output.inputArr.slice(2).join('')));
-      console.log(` even math: ${mathOperations.numbers}`);
-      mathOperations.subtraction();
-      break;
+    };
+
+  } else {
+
+    console.log(`even operator: ${operator}`);
+
+    switch (true) {
+
+      case (operator === ' + '):
+        mathOperations.numbers.push(Number(output.inputArr.slice(2).join('')));
+        console.log(` even math: ${mathOperations.numbers}`);
+        mathOperations.addition();
+        break;
     
-    case (operator === ' ÷ '):
-      mathOperations.numbers.push(Number(output.inputArr.slice(2).join('')));
-      console.log(` even math: ${mathOperations.numbers}`);
-      mathOperations.division();
-      break;
+      case (operator === ' - '):
+        mathOperations.numbers.push(Number(output.inputArr.slice(2).join('')));
+        console.log(` even math: ${mathOperations.numbers}`);
+        mathOperations.subtraction();
+        break;
     
-    case (operator === ' x '):
-      mathOperations.numbers.push(Number(output.inputArr.slice(2).join('')));
-      console.log(` even math: ${mathOperations.numbers}`);
-      mathOperations.multiplication();
-      break;
+      case (operator === ' ÷ '):
+        mathOperations.numbers.push(Number(output.inputArr.slice(2).join('')));
+        console.log(` even math: ${mathOperations.numbers}`);
+        mathOperations.division();
+        break;
     
+      case (operator === ' x '):
+        mathOperations.numbers.push(Number(output.inputArr.slice(2).join('')));
+        console.log(` even math: ${mathOperations.numbers}`);
+        mathOperations.multiplication();
+        break;
+    
+    };
+
+    output.inputArr.length = 0;
+
+    output.inputArr.push(mathOperations.result);
+
+    console.log(`even: ${output.inputArr}`);
+
+    mathOperations.numbers.length = 0;
+
   };
 
-  output.inputArr.length = 0;
-
-  output.inputArr.push(mathOperations.result);
-
-  console.log(`even: ${output.inputArr}`);
-
-  mathOperations.numbers.length = 0;
-
   mathOperations.evenState = true;
-
+    
 };
