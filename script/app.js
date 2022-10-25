@@ -109,20 +109,57 @@ const output = {
 
   undoLastCharacter() { 
 
-    this.inputArr.pop();
+    if (mathOperations.evenState) return;
 
-    mathOperations.numbers.pop();
+    const isOperator = this.checkOperator();
 
-    console.log(`undo: ${this.inputArr} number: ${mathOperations.numbers}`);
+    let firstNumber;
+
+    if (isOperator) {
+
+      firstNumber = mathOperations.numbers.at(0);
+
+      console.log(`numberFirst: ${firstNumber}`);
+
+    };
+
+    if (isOperator) {
+
+      this.inputArr.pop();
+
+      if (mathOperations.numbers.length >= 1) { 
+
+        mathOperations.numbers.length = 0;
+
+        mathOperations.numbers.push(firstNumber);
+
+      };
+
+    } else {
+
+      const currentInput = [...this.inputArr.join('').split('')];
+
+      this.inputArr = [...currentInput];
+
+      this.inputArr.pop();
+
+      console.log(`result: ${currentInput}`);
+            
+      console.log(`slice: ${this.inputArr}`);
+
+      mathOperations.numbers.pop();
+
+      console.log(`undo: ${this.inputArr} number: ${mathOperations.numbers}`);
+    
+    };
 
     if (this.inputArr.toString() === '') {
 
       outputPara.textContent = '0';
 
-    } else { 
+    } else {
 
-      outputPara.textContent = outputPara.textContent.slice(0,
-        outputPara.textContent.length - 1);
+      this.showOutput();
 
     };
 
@@ -294,6 +331,8 @@ function performFirstOperation(e) {
     let operand = Number(output.inputArr.join(''));
 
     mathOperations.numbers.push(operand);
+
+    console.log(`first: ${mathOperations.numbers}`)
     
     output.inputArr.length = 0;
 
