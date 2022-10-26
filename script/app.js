@@ -113,27 +113,9 @@ const output = {
 
     const isOperator = this.checkOperator();
 
-    let firstNumber;
-
-    if (isOperator) {
-
-      firstNumber = mathOperations.numbers.at(0);
-
-      console.log(`numberFirst: ${firstNumber}`);
-
-    };
-
     if (isOperator) {
 
       this.inputArr.pop();
-
-      if (mathOperations.numbers.length >= 1) { 
-
-        mathOperations.numbers.length = 0;
-
-        mathOperations.numbers.push(firstNumber);
-
-      };
 
     } else {
 
@@ -325,6 +307,8 @@ function performFirstOperation(e) {
   console.log(!checkOperator);
   
   if (!checkOperator) {
+    
+    mathOperations.numbers.length = 0;
 
     let operator = e.target.value;
 
