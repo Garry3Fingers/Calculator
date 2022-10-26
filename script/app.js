@@ -414,17 +414,15 @@ function calculateEvenOperation() {
 
   const operator = output.findOperator();
 
-  if (!operator || (output.inputArr[2] === undefined)) {
+  const checkOperator = output.checkOperator();
 
-    if (output.inputArr[1]) {
-      
-      output.inputArr.pop();
+  if (!checkOperator) return mathOperations.evenState = true;
 
-      mathOperations.numbers.length = 0;
-
-      output.showOutput();
+  if (output.inputArr.at(-1) === operator) {
     
-    };
+    output.inputArr.pop();
+
+    output.showOutput();
 
   } else {
 
