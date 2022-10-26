@@ -56,6 +56,12 @@ const output = {
 
   addPeriod() {
 
+    const operator = this.findOperator();
+
+    const havePeriod = this.inputArr.some((item) => item === '.');
+
+    if (havePeriod) return;
+
     if (mathOperations.evenState) {
 
       this.inputArr.length = 0;
@@ -64,8 +70,9 @@ const output = {
 
       this.inputArr.push(0, '.');
 
-    } else if (this.inputArr.toString() === '' ||
-      this.inputArr[0] === 0) {
+    } else if ((this.inputArr.toString() === '') ||
+      (this.inputArr.at(0) === 0) || 
+      (this.inputArr.at(-1) === operator)) {
       
       this.inputArr.push(0, '.');
 
@@ -79,22 +86,6 @@ const output = {
 
   },
   
-  checkPeriod() { 
-
-    const isPeriod = this.inputArr.some((item) => item === '.');
-
-    if (isPeriod) {
-
-      periodBtn.setAttribute('disabled', '');
-
-    } else {
-
-      periodBtn.removeAttribute('disabled', '');
-      
-    };
-
-  },
-
   clearAll() { 
 
     periodBtn.removeAttribute('disabled', '');
@@ -195,16 +186,6 @@ digitsBtn.forEach((btn) => {
 periodBtn.addEventListener('click', () => { 
 
   output.addPeriod();
-
-});
-
-allBtn.forEach((btn) => { 
-
-  btn.addEventListener('click', () => { 
-
-    output.checkPeriod();
-
-  });
 
 });
 
