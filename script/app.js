@@ -24,6 +24,10 @@ const allBtn = document.querySelectorAll('button');
 
 const mathBtn = document.querySelectorAll('.operation-btn');
 
+const leftParenthesis = document.querySelector('.left-parenthesis');
+
+const rightParenthesis = document.querySelector('.right-parenthesis');
+
 // Input output block 
 
 const output = {
