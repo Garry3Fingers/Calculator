@@ -58,9 +58,9 @@ const output = {
 
     const operator = this.findOperator();
 
-    const havePeriod = this.inputArr.some((item) => item === '.');
+    const hasPeriod = this.inputArr.some((item) => item === '.');
 
-    if (havePeriod) return;
+    if (hasPeriod) return;
 
     if (mathOperations.evenState) {
 
@@ -145,9 +145,61 @@ const output = {
     if (lengthOutput < 15) this.inputArr.push(Number
       (e.target.textContent));
 
-   },
+  },
+  
+  changeOperator(e) { 
+
+    const hasOperator = this.checkOperator();
+
+    if (hasOperator) {
+
+      let typeOfLastItem = typeof this.inputArr.at(-1);
+
+      if (typeOfLastItem !== 'number') {
+
+        const operatorInArr = this.findOperator();
+
+        let operator = e.target.value;
+
+        if (operator === '/') {
+
+          operator = ' ÷ ';
+
+        } else if (operator === '*') {
+
+          operator = ' x ';
+
+        } else {
+
+          operator = ` ${e.target.value} `;
+
+        };
+
+        if (operator !== operatorInArr) { 
+
+          this.inputArr[this.inputArr.length -1] = operator;
+
+          this.showOutput();
+
+        };
+
+      };
+
+    };
+
+  },
 
 };
+
+mathBtn.forEach((btn) => { 
+
+  btn.addEventListener('click', (e) => { 
+
+    output.changeOperator(e);
+
+  });
+
+});
 
 digitsBtn.forEach((btn) => { 
 
