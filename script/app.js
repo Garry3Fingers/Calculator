@@ -118,8 +118,6 @@ const output = {
   
   clearAll() { 
 
-    periodBtn.removeAttribute('disabled', '');
-
     this.inputArr.length = 0;
 
     mathOperations.numbers.length = 0;
@@ -170,10 +168,22 @@ const output = {
 
   getDigits(e) {
 
-    let lengthOutput = outputPara.textContent.length;
+    if (mathOperations.evenState) {
 
-    if (lengthOutput < 15) this.inputArr.push(Number
-      (e.target.textContent));
+      clearAfterEven();
+
+      this.inputArr.push(Number(e.target.textContent));
+
+      this.showOutput()
+
+    } else {
+
+      let lengthOutput = outputPara.textContent.length;
+
+      if (lengthOutput < 15) this.inputArr.push(Number
+        (e.target.textContent));
+    
+    };
 
   },
   
@@ -228,29 +238,59 @@ const output = {
 
   addLeftParenthesis() {
 
-    const hasLeftParenthesis = this.inputArr.some(
-      (item) => item === `\(`);
-    
-    if (hasLeftParenthesis) return;
+    if (mathOperations.evenState) {
 
-    this.inputArr.push(`\(`);
+      clearAfterEven();
+
+      this.inputArr.push(`\(`);
+
+    } else {
+
+      const hasLeftParenthesis = this.inputArr.some(
+        (item) => item === `\(`);
+    
+      if (hasLeftParenthesis) return;
+
+      this.inputArr.push(`\(`);
+    
+    };
 
     this.showOutput();
-
+  
   },
 
   addRightParenthesis() {
 
-    const hasRightParenthesis = this.inputArr.some(
-      (item) => item === `\)`);
+    if (mathOperations.evenState) {
 
-    if (hasRightParenthesis) return;
+      clearAfterEven();
 
-    this.inputArr.push(`\)`);
+      this.inputArr.push(`\)`);
+
+    } else {
+
+      const hasRightParenthesis = this.inputArr.some(
+        (item) => item === `\)`);
+
+      if (hasRightParenthesis) return;
+
+      this.inputArr.push(`\)`);
+
+    };
 
     this.showOutput();
 
    },
+
+};
+
+function clearAfterEven() { 
+
+  mathOperations.evenState = false;
+
+  output.inputArr.length = 0;
+
+  mathOperations.numbers.length = 0;
 
 };
 
@@ -287,20 +327,6 @@ digitsBtn.forEach((btn) => {
   btn.addEventListener('click', (e) => { 
 
     output.getDigits(e);
-
-    if (mathOperations.evenState) { 
-
-      mathOperations.evenState = false;
-
-      output.inputArr.length = 0;
-
-      mathOperations.numbers.length = 0;
-
-      output.inputArr.push(Number(e.target.textContent));
-
-      output.showOutput()
-
-    };
 
   });
 
