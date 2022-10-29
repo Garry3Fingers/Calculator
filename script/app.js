@@ -36,8 +36,11 @@ const output = {
 
   findOperator() {
 
-    const operator = this.inputArr.find((item) => item === ' + ' ||
-      item === ' - ' || item === ' ÷ ' || item === ' x ');
+    const operator = this.inputArr.find((item) =>
+      item === ' + ' ||
+      item === ' - ' ||
+      item === ' ÷ ' ||
+      item === ' x ');
 
     return operator;
     
@@ -45,8 +48,11 @@ const output = {
   
   checkOperator() {
 
-    const operator = this.inputArr.some((operator) => operator === ' + ' ||
-      operator === ' - ' || operator === ' ÷ ' || operator === ' x ');
+    const operator = this.inputArr.some((operator) =>
+      operator === ' + ' ||
+      operator === ' - ' ||
+      operator === ' ÷ ' ||
+      operator === ' x ');
 
     return operator;
     
@@ -80,7 +86,8 @@ const output = {
 
     } else if ((this.inputArr.toString() === '') ||
       (this.inputArr.at(0) === 0) || 
-      (this.inputArr.at(-1) === operator) || hasLeftParenthesis) {
+      (this.inputArr.at(-1) === operator) ||
+      hasLeftParenthesis) {
       
       this.inputArr.push(0, '.');
 
@@ -98,7 +105,8 @@ const output = {
 
     const hasLeftParenthesis = (this.inputArr.at(-1) === `\(`);
 
-    if ((this.inputArr.at(0) === undefined) || hasLeftParenthesis ) {
+    if ((this.inputArr.at(0) === undefined) ||
+      hasLeftParenthesis) {
 
       this.inputArr.push('-');
 
@@ -220,6 +228,11 @@ const output = {
 
   addLeftParenthesis() {
 
+    const hasLeftParenthesis = this.inputArr.some(
+      (item) => item === `\(`);
+    
+    if (hasLeftParenthesis) return;
+
     this.inputArr.push(`\(`);
 
     this.showOutput();
@@ -227,6 +240,11 @@ const output = {
   },
 
   addRightParenthesis() {
+
+    const hasRightParenthesis = this.inputArr.some(
+      (item) => item === `\)`);
+
+    if (hasRightParenthesis) return;
 
     this.inputArr.push(`\)`);
 
@@ -340,6 +358,25 @@ const mathOperations = {
 
   evenState: false,
 
+  getLeftOperand() {
+
+    const operand = Number(output.inputArr.join('')
+                                          .replace(/[()\s]/g, ''));
+
+    return operand;
+
+   },
+
+  getRightOperand() {
+
+    const operand = Number(output.inputArr.slice(2)
+                                          .join('')
+                                          .replace(/[()\s]/g, ''));
+
+    return operand;
+
+   },
+
   addition() { 
 
     this.result = this.numbers.reduce((total, number) => {
@@ -398,12 +435,13 @@ mathBtn.forEach((btn) => {
  
 function performFirstOperation(e) { 
 
-  const findTypeNumber = output.inputArr.some((item) => typeof item === 'number');
+  const findTypeNumber = output.inputArr.some((item) =>
+    typeof item === 'number');
 
   const leftParenthesis = output.inputArr.at(0) === `\(`;
 
-  if ((output.inputArr.at(0) === '-') &&
-    (!findTypeNumber) || (leftParenthesis && (!findTypeNumber))) return;
+  if (((output.inputArr.at(0) === '-') && (!findTypeNumber)) ||
+    (leftParenthesis && (!findTypeNumber))) return;
   
   const checkOperator = output.checkOperator();
 
@@ -413,11 +451,11 @@ function performFirstOperation(e) {
     
     mathOperations.numbers.length = 0;
 
-    let operator = e.target.value;
+    const operator = e.target.value;
 
-    let operand = Number(output.inputArr.join('').replace(/[()]/g, ''));
+    const leftOperand = mathOperations.getLeftOperand();
 
-    mathOperations.numbers.push(operand);
+    mathOperations.numbers.push(leftOperand);
 
     console.log(`first: ${mathOperations.numbers}`)
     
@@ -425,15 +463,15 @@ function performFirstOperation(e) {
 
     if (operator === '/') {
 
-      output.inputArr.push(operand, ' ÷ ');
+      output.inputArr.push(leftOperand, ' ÷ ');
 
     } else if (operator === '*') {
     
-      output.inputArr.push(operand, ' x ');
+      output.inputArr.push(leftOperand, ' x ');
 
     } else {
 
-      output.inputArr.push(operand, ` ${operator} `);
+      output.inputArr.push(leftOperand, ` ${operator} `);
 
     };
 
@@ -453,40 +491,36 @@ function performSecondOperation(e) {
 
   const operatorInArr = output.findOperator();
   
-  let hasOperand = (typeof output.inputArr.at(2) === 'number') ||
+  const hasOperand = (typeof output.inputArr.at(2) === 'number') ||
     (typeof output.inputArr.at(3) === 'number') ||
     (typeof output.inputArr.at(4) === 'number');
   
-  let rightOperand = Number(output.inputArr.slice(2).join('').replace(/[()\s]/g, ''));
+  const rightOperand = mathOperations.getRightOperand();
 
   console.log(`right: ${rightOperand}`);
 
-  let operator = e.target.value;
+  const operator = e.target.value;
 
   console.log(operator);
 
   switch (true) { 
 
     case ((operatorInArr === ' + ') && hasOperand):
-    //  mathOperations.numbers.push(Number(output.inputArr.slice(2).join('').replace(/[()]/g, '')));
       mathOperations.numbers.push(rightOperand);
       mathOperations.addition();
       break;
     
     case ((operatorInArr === ' - ') && hasOperand):
-    //  mathOperations.numbers.push(Number(output.inputArr.slice(2).join('').replace(/[()]/g, '')));
       mathOperations.numbers.push(rightOperand);
       mathOperations.subtraction();
       break;
     
     case ((operatorInArr === ' ÷ ') && hasOperand):
-    //  mathOperations.numbers.push(Number(output.inputArr.slice(2).join('').replace(/[()]/g, '')));
       mathOperations.numbers.push(rightOperand);
       mathOperations.division();
       break;
     
     case ((operatorInArr === ' x ') && hasOperand):
-    //  mathOperations.numbers.push(Number(output.inputArr.slice(2).join('').replace(/[()]/g, '')));
       mathOperations.numbers.push(rightOperand);
       mathOperations.multiplication();
       break;
@@ -541,28 +575,30 @@ function calculateEvenOperation() {
 
     console.log(`even operator: ${operator}`);
 
+    const rightOperand = mathOperations.getRightOperand();
+
     switch (true) {
 
       case (operator === ' + '):
-        mathOperations.numbers.push(Number(output.inputArr.slice(2).join('').replace(/[()\s]/g, '')));
+        mathOperations.numbers.push(rightOperand);
         console.log(` even math: ${mathOperations.numbers}`);
         mathOperations.addition();
         break;
     
       case (operator === ' - '):
-        mathOperations.numbers.push(Number(output.inputArr.slice(2).join('').replace(/[()\s]/g, '')));
+        mathOperations.numbers.push(rightOperand);
         console.log(` even math: ${mathOperations.numbers}`);
         mathOperations.subtraction();
         break;
     
       case (operator === ' ÷ '):
-        mathOperations.numbers.push(Number(output.inputArr.slice(2).join('').replace(/[()\s]/g, '')));
+        mathOperations.numbers.push(rightOperand);
         console.log(` even math: ${mathOperations.numbers}`);
         mathOperations.division();
         break;
     
       case (operator === ' x '):
-        mathOperations.numbers.push(Number(output.inputArr.slice(2).join('').replace(/[()\s]/g, '')));
+        mathOperations.numbers.push(rightOperand);
         console.log(` even math: ${mathOperations.numbers}`);
         mathOperations.multiplication();
         break;
