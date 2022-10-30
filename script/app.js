@@ -532,7 +532,11 @@ function showError() {
 
   mathOperations.numbers.length = 0;
 
+  mathOperations.firstOperationState = false;
+
   mathOperations.addMinusState = false;
+
+  mathOperations.evenState = false;
 
   outputPara.textContent = 'Error';
 
@@ -658,15 +662,85 @@ function performSecondOperation(e) {
 
 };
 
+function checkRightOperand() { 
+
+  const checkOperator = output.checkOperator();
+
+  const charAfterOperator = [...output.inputArr.slice(2)];
+
+  const hasParenthesis = charAfterOperator.some((item) =>
+    item === '(' || item === ')');
+
+  const hasRightNumber = charAfterOperator.some((item) =>
+    typeof item === 'number');
+
+  if ((!hasRightNumber) && checkOperator && hasParenthesis) {
+
+    showError();
+
+    return true;
+
+  };
+
+  const indexLeftParenthesis = charAfterOperator.findIndex(
+    (item) => item === '(');
+
+  console.log(`lIn: ${indexLeftParenthesis}`);
+
+  const indexRightParenthesis = charAfterOperator.findIndex(
+    (item) => item === ')');
+
+  const indexLastNumber = charAfterOperator.findIndex(
+    (item) => typeof item === 'number');
+
+  console.log(`NIn: ${indexLastNumber}`);
+
+  const hasLeftParenthesis = charAfterOperator.some((item) =>
+    item === '(');
+
+  const hasRightParenthesis = charAfterOperator.some((item) =>
+    item === ')');
+
+  console.log(indexLeftParenthesis > indexLastNumber)
+
+  if (((indexLeftParenthesis > indexLastNumber) && hasLeftParenthesis) ||
+    ((indexRightParenthesis < indexLastNumber) && hasRightParenthesis)) {
+
+    showError();
+
+    return true;
+
+  };
+
+};
+
 evenBtn.addEventListener('click', calculateEvenOperation);
 
 function calculateEvenOperation() { 
 
-  const operator = output.findOperator();
+  const checkError = checkRightOperand();
+
+  if (checkError) return;
 
   const checkOperator = output.checkOperator();
 
-  if (!checkOperator) return mathOperations.evenState = true;
+  if (!checkOperator) {
+
+    const leftOperand = mathOperations.getLeftOperand();
+
+    output.inputArr.length = 0;
+
+    output.inputArr.push(leftOperand);
+    
+    mathOperations.evenState = true;
+
+    output.showOutput();
+
+    return;
+
+  };
+  
+  const operator = output.findOperator();
 
   if (output.inputArr.at(-1) === operator) {
     
