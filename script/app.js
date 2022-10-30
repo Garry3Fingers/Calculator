@@ -105,8 +105,7 @@ const output = {
 
     const hasLeftParenthesis = (this.inputArr.at(-1) === `\(`);
 
-    if ((this.inputArr.at(0) === undefined) ||
-      hasLeftParenthesis) {
+    if (hasLeftParenthesis) {
 
       this.inputArr.push('-');
 
@@ -117,6 +116,12 @@ const output = {
   },
   
   clearAll() { 
+
+    mathOperations.firstOperationState = false;
+
+    mathOperations.addMinusState = false;
+
+    mathOperations.evenState = false;
 
     this.inputArr.length = 0;
 
@@ -137,6 +142,8 @@ const output = {
       this.inputArr.pop();
 
     } else {
+
+      mathOperations.firstOperationState = false;
 
       const currentInput = [...this.inputArr.join('').split('')];
 
@@ -294,12 +301,6 @@ function clearAfterEven() {
 
 };
 
-minusBtn.addEventListener('click', () => { 
-
-  output.addMinus();
-
-});
-
 leftParenthesis.addEventListener('click', () => {
 
   output.addLeftParenthesis();
@@ -382,7 +383,11 @@ const mathOperations = {
 
   result: 0,
 
+  addMinusState: false,
+
   evenState: false,
+
+  firstOperationState: false,
 
   getLeftOperand() {
 
@@ -458,26 +463,96 @@ mathBtn.forEach((btn) => {
   btn.addEventListener('click', performFirstOperation);
 
 });
- 
-function performFirstOperation(e) { 
+
+// This event listener must be after event listener performFirstOperation
+minusBtn.addEventListener('click', () => {
+
+  output.addMinus();
+
+});
+
+function checkBeforeFirstOperation(operation) { 
+
+  const operator = operation;
+
+  const leftParenthesis = output.inputArr.at(0) === `\(`;
+
+  const checkMinus = output.inputArr.at(1) !== '-';
+
+  if (leftParenthesis && checkMinus &&
+    (operator === '-') && (!mathOperations.addMinusState)) {
+
+    mathOperations.addMinusState = true;
+
+    return true;
+
+  };
 
   const findTypeNumber = output.inputArr.some((item) =>
     typeof item === 'number');
 
-  const leftParenthesis = output.inputArr.at(0) === `\(`;
+  const checkParenthesis = output.inputArr.some((item) =>
+    item === '(' || item === ')');
 
-  if (((output.inputArr.at(0) === '-') && (!findTypeNumber)) ||
-    (leftParenthesis && (!findTypeNumber))) return;
-  
+  if (checkParenthesis && (!findTypeNumber)) {
+
+    showError();
+
+    return true;
+
+  };
+
+  const indexLeftParenthesis = output.inputArr.findIndex(
+    (item) => item === '(');
+
+  const indexRightParenthesis = output.inputArr.findIndex(
+    (item) => item === ')');
+
+  const indexNumberInArr = output.inputArr.findIndex(
+    (item) => typeof item === 'number');
+
+  const checkRightParenthesis = output.inputArr.some(
+    (item) => item === ')');
+
+  if (((indexRightParenthesis < indexNumberInArr) &&
+    checkRightParenthesis) ||
+    (indexLeftParenthesis > indexNumberInArr)) {
+
+    showError();
+
+    return true;
+
+  };
+
+};
+
+function showError() { 
+
+  output.inputArr.length = 0;
+
+  mathOperations.numbers.length = 0;
+
+  mathOperations.addMinusState = false;
+
+  outputPara.textContent = 'Error';
+
+};
+ 
+function performFirstOperation(e) { 
+
+  if (mathOperations.firstOperationState) return;
+
+  const operator = e.target.value;
+
+  const checkBeforeExecution = checkBeforeFirstOperation(operator);
+
+  if (checkBeforeExecution) return;
+    
   const checkOperator = output.checkOperator();
-
-  console.log(!checkOperator);
   
   if (!checkOperator) {
     
     mathOperations.numbers.length = 0;
-
-    const operator = e.target.value;
 
     const leftOperand = mathOperations.getLeftOperand();
 
@@ -502,6 +577,8 @@ function performFirstOperation(e) {
     };
 
   }; 
+
+  mathOperations.firstOperationState = true;
 
   output.showOutput();
 
@@ -640,6 +717,8 @@ function calculateEvenOperation() {
     mathOperations.numbers.length = 0;
 
   };
+
+  mathOperations.firstOperationState = false;
 
   mathOperations.evenState = true;
     
