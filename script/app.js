@@ -487,11 +487,11 @@ function checkBeforeFirstOperation(operation) {
 
   const operator = operation;
 
-  const leftParenthesis = output.inputArr.at(0) === `\(`;
+  const hasLeftParenthesis = output.inputArr.at(0) === `\(`;
 
   const checkMinus = output.inputArr.at(1) !== '-';
 
-  if (leftParenthesis && checkMinus &&
+  if (hasLeftParenthesis && checkMinus &&
     (operator === '-') && (!mathOperations.addMinusState)) {
 
     mathOperations.addMinusState = true;
@@ -520,15 +520,29 @@ function checkBeforeFirstOperation(operation) {
   const indexRightParenthesis = output.inputArr.findIndex(
     (item) => item === ')');
 
-  const indexNumberInArr = output.inputArr.findIndex(
+  const indexFirstNumber = output.inputArr.findIndex(
     (item) => typeof item === 'number');
 
-  const checkRightParenthesis = output.inputArr.some(
+  const hasRightParenthesis = output.inputArr.some(
     (item) => item === ')');
 
-  if (((indexRightParenthesis < indexNumberInArr) &&
-    checkRightParenthesis) ||
-    (indexLeftParenthesis > indexNumberInArr)) {
+  if (((indexRightParenthesis < indexFirstNumber) &&
+    hasRightParenthesis) ||
+    (indexLeftParenthesis > indexFirstNumber)) {
+
+    showError();
+
+    return true;
+
+  };
+
+  const indexLastNumber = output.inputArr.findLastIndex(
+    (item) => typeof item === 'number');
+  
+  if (((indexLeftParenthesis < indexFirstNumber &&
+    indexLeftParenthesis > indexLastNumber) && hasLeftParenthesis) ||
+    ((indexRightParenthesis > indexFirstNumber &&
+      indexRightParenthesis < indexLastNumber) && hasRightParenthesis)) {
 
     showError();
 
