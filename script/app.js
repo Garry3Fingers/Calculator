@@ -119,6 +119,8 @@ const output = {
 
     mathOperations.firstOperationState = false;
 
+    mathOperations.secondOperationState = false;
+
     mathOperations.addMinusState = false;
 
     mathOperations.evenState = false;
@@ -389,6 +391,8 @@ const mathOperations = {
 
   firstOperationState: false,
 
+  secondOperationState: false,
+
   getLeftOperand() {
 
     const operand = Number(output.inputArr.join('')
@@ -534,6 +538,8 @@ function showError() {
 
   mathOperations.firstOperationState = false;
 
+  mathOperations.secondOperationState = false;
+
   mathOperations.addMinusState = false;
 
   mathOperations.evenState = false;
@@ -596,6 +602,16 @@ mathBtn.forEach((btn) => {
 
 function performSecondOperation(e) { 
 
+  const operator = e.target.value;
+
+  const checkMinus = checkMinusForSecondOperation(operator);
+
+  if (checkMinus) return;
+
+  const checkError = checkRightOperand();
+
+  if (checkError) return;
+  
   const operatorInArr = output.findOperator();
   
   const hasOperand = (typeof output.inputArr.at(2) === 'number') ||
@@ -603,12 +619,6 @@ function performSecondOperation(e) {
     (typeof output.inputArr.at(4) === 'number');
   
   const rightOperand = mathOperations.getRightOperand();
-
-  console.log(`right: ${rightOperand}`);
-
-  const operator = e.target.value;
-
-  console.log(operator);
 
   switch (true) { 
 
@@ -654,11 +664,32 @@ function performSecondOperation(e) {
 
   mathOperations.numbers.length = 0;
 
+  mathOperations.secondOperationState = false;
+
   mathOperations.numbers.push(mathOperations.result);
 
-  console.log(operator);
-
   output.showOutput();
+
+};
+
+function checkMinusForSecondOperation(operation) { 
+
+  const operator = operation;
+
+  const charAfterOperator = [...output.inputArr.slice(2)];
+
+  const leftParenthesis = charAfterOperator.at(0) === `\(`;
+
+  const checkMinus = charAfterOperator.at(1) === '-';
+
+  if ((operator === '-') && (!mathOperations.secondOperationState) &&
+    leftParenthesis && checkMinus) {
+
+    mathOperations.secondOperationState = true;
+
+    return true;
+
+  };
 
 };
 
@@ -793,6 +824,8 @@ function calculateEvenOperation() {
   };
 
   mathOperations.firstOperationState = false;
+
+  mathOperations.secondOperationState = false;
 
   mathOperations.evenState = true;
     
