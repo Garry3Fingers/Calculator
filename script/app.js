@@ -141,6 +141,14 @@ const output = {
 
     if (isOperator) {
 
+      const checkMinus = this.inputArr.at(-1);
+
+      if (checkMinus === '-') {
+        
+        mathOperations.secondOperationState = false;
+
+      };
+
       this.inputArr.pop();
 
     } else {
