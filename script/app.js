@@ -729,10 +729,10 @@ function checkRightOperand() {
   const indexRightParenthesis = charAfterOperator.findIndex(
     (item) => item === ')');
 
-  const indexLastNumber = charAfterOperator.findIndex(
+  const indexFirstNumber = charAfterOperator.findIndex(
     (item) => typeof item === 'number');
 
-  console.log(`NIn: ${indexLastNumber}`);
+  console.log(`NIn: ${indexFirstNumber}`);
 
   const hasLeftParenthesis = charAfterOperator.some((item) =>
     item === '(');
@@ -740,10 +740,24 @@ function checkRightOperand() {
   const hasRightParenthesis = charAfterOperator.some((item) =>
     item === ')');
 
-  console.log(indexLeftParenthesis > indexLastNumber)
+  console.log(indexLeftParenthesis > indexFirstNumber)
 
-  if (((indexLeftParenthesis > indexLastNumber) && hasLeftParenthesis) ||
-    ((indexRightParenthesis < indexLastNumber) && hasRightParenthesis)) {
+  if (((indexLeftParenthesis > indexFirstNumber) && hasLeftParenthesis) ||
+    ((indexRightParenthesis < indexFirstNumber) && hasRightParenthesis)) {
+
+    showError();
+
+    return true;
+
+  };
+
+  const indexLastNumber = charAfterOperator.findLastIndex(
+    (item) => typeof item === 'number');
+  
+  if (((indexLeftParenthesis < indexFirstNumber &&
+    indexLeftParenthesis > indexLastNumber) && hasLeftParenthesis) ||
+    ((indexRightParenthesis > indexFirstNumber &&
+      indexRightParenthesis < indexLastNumber) && hasRightParenthesis)) {
 
     showError();
 
