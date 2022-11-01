@@ -450,6 +450,32 @@ const mathOperations = {
 
   },
 
+  divisionOnZero() { 
+
+    const operand = this.numbers.at(-1);
+
+    if (operand === 0) { 
+
+      output.inputArr.length = 0;
+
+      this.numbers.length = 0;
+
+      this.firstOperationState = false;
+
+      this.secondOperationState = false;
+
+      this.addMinusState = false;
+
+      this.evenState = true;
+
+      outputPara.textContent = 'Division on zero!';
+
+      return true;
+
+    };
+
+  },
+
   multiplication() { 
 
     this.result = this.numbers.reduce((firstNumber, secondNumber) => {
@@ -653,9 +679,11 @@ function performSecondOperation(e) {
       mathOperations.numbers.push(rightOperand);
       mathOperations.subtraction();
       break;
-    
+        
     case ((operatorInArr === ' ÷ ') && hasOperand):
       mathOperations.numbers.push(rightOperand);
+      const hasZero = mathOperations.divisionOnZero();
+      if (hasZero) return;
       mathOperations.division();
       break;
     
@@ -844,6 +872,8 @@ function calculateEvenOperation() {
       case (operator === ' ÷ '):
         mathOperations.numbers.push(rightOperand);
         console.log(` even math: ${mathOperations.numbers}`);
+        const hasZero = mathOperations.divisionOnZero();
+        if (hasZero) return;
         mathOperations.division();
         break;
     
