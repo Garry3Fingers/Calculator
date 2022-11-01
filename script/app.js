@@ -791,13 +791,21 @@ function calculateEvenOperation() {
 
   const checkOperator = output.checkOperator();
 
+  const operator = output.findOperator();
+
   if (!checkOperator) {
+
+    const checkBeforeExecution = checkBeforeFirstOperation(operator);
+
+    if (checkBeforeExecution) return;
 
     const leftOperand = mathOperations.getLeftOperand();
 
     output.inputArr.length = 0;
 
     output.inputArr.push(leftOperand);
+
+    mathOperations.addMinusState = false;
     
     mathOperations.evenState = true;
 
@@ -806,8 +814,6 @@ function calculateEvenOperation() {
     return;
 
   };
-  
-  const operator = output.findOperator();
 
   if (output.inputArr.at(-1) === operator) {
     
@@ -862,6 +868,8 @@ function calculateEvenOperation() {
   mathOperations.firstOperationState = false;
 
   mathOperations.secondOperationState = false;
+
+  mathOperations.addMinusState = false;
 
   mathOperations.evenState = true;
     
