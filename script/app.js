@@ -37,10 +37,10 @@ const output = {
   findOperator() {
 
     const operator = this.inputArr.find((item) =>
-      item === ' + ' ||
-      item === ' - ' ||
-      item === ' ÷ ' ||
-      item === ' x ');
+      item === ' + '
+      || item === ' - '
+      || item === ' ÷ '
+      || item === ' x ');
 
     return operator;
     
@@ -49,10 +49,10 @@ const output = {
   checkOperator() {
 
     const operator = this.inputArr.some((operator) =>
-      operator === ' + ' ||
-      operator === ' - ' ||
-      operator === ' ÷ ' ||
-      operator === ' x ');
+      operator === ' + '
+      || operator === ' - '
+      || operator === ' ÷ '
+      || operator === ' x ');
 
     return operator;
     
@@ -84,10 +84,10 @@ const output = {
 
       this.inputArr.push(0, '.');
 
-    } else if ((this.inputArr.toString() === '') ||
-      (this.inputArr.at(0) === 0) || 
-      (this.inputArr.at(-1) === operator) ||
-      hasLeftParenthesis) {
+    } else if ((this.inputArr.toString() === '')
+      || (this.inputArr.at(0) === 0)
+      || (this.inputArr.at(-1) === operator)
+      || hasLeftParenthesis) {
       
       this.inputArr.push(0, '.');
 
@@ -165,8 +165,8 @@ const output = {
 
       this.inputArr = [...currentInput];
 
-      if ((this.inputArr.at(0) === '(') &&
-        (this.inputArr.at(1) === '-')) {
+      if ((this.inputArr.at(0) === '(')
+        && (this.inputArr.at(1) === '-')) {
 
         mathOperations.addMinusState = false;
 
@@ -227,12 +227,12 @@ const output = {
 
     if (hasOperator) {
 
-      let noParenthesis = ((this.inputArr.at(-1) !== `\)`) &&
-        (this.inputArr.at(-1) !== `\(`));
+      const noParenthesis = ((this.inputArr.at(-1) !== `\)`)
+        && (this.inputArr.at(-1) !== `\(`));
       
       if (noParenthesis) {
 
-        let typeOfLastItem = typeof this.inputArr.at(-1);
+        const typeOfLastItem = typeof this.inputArr.at(-1);
 
         if (typeOfLastItem !== 'number') {
 
@@ -436,7 +436,9 @@ const mathOperations = {
   addition() { 
 
     this.result = this.numbers.reduce((total, number) => {
+      
       return roundToThree(total + number);
+    
     }, 0);
 
     outputPara.textContent = `${this.result}`;
@@ -446,7 +448,9 @@ const mathOperations = {
   subtraction() {
 
     this.result = this.numbers.reduce((firstNumber, secondNumber) => { 
+      
       return roundToThree(firstNumber - secondNumber);
+    
     });
 
     outputPara.textContent = `${this.result}`;
@@ -456,7 +460,9 @@ const mathOperations = {
   division() { 
 
     this.result = this.numbers.reduce((firstNumber, secondNumber) => {
+      
       return roundToThree(firstNumber / secondNumber);
+    
     });
 
     outputPara.textContent = `${this.result}`;
@@ -492,7 +498,9 @@ const mathOperations = {
   multiplication() { 
 
     this.result = this.numbers.reduce((firstNumber, secondNumber) => {
+      
       return roundToThree(firstNumber * secondNumber);
+    
     });
 
     outputPara.textContent = `${this.result}`;
@@ -530,8 +538,8 @@ function checkBeforeFirstOperation(operation) {
 
   const checkMinus = output.inputArr.at(1) !== '-';
 
-  if (hasLeftParenthesis && checkMinus &&
-    (operator === '-') && (!mathOperations.addMinusState)) {
+  if (hasLeftParenthesis && checkMinus && (operator === '-')
+    && (!mathOperations.addMinusState)) {
 
     mathOperations.addMinusState = true;
 
@@ -565,9 +573,8 @@ function checkBeforeFirstOperation(operation) {
   const hasRightParenthesis = output.inputArr.some(
     (item) => item === ')');
 
-  if (((indexRightParenthesis < indexFirstNumber) &&
-    hasRightParenthesis) ||
-    (indexLeftParenthesis > indexFirstNumber)) {
+  if (((indexRightParenthesis < indexFirstNumber) && hasRightParenthesis)
+    || (indexLeftParenthesis > indexFirstNumber)) {
 
     showError();
 
@@ -578,10 +585,9 @@ function checkBeforeFirstOperation(operation) {
   const indexLastNumber = output.inputArr.findLastIndex(
     (item) => typeof item === 'number');
   
-  if (((indexLeftParenthesis < indexFirstNumber &&
-    indexLeftParenthesis > indexLastNumber) && hasLeftParenthesis) ||
-    ((indexRightParenthesis > indexFirstNumber &&
-      indexRightParenthesis < indexLastNumber) && hasRightParenthesis)) {
+  if (((indexLeftParenthesis < indexFirstNumber && indexLeftParenthesis > indexLastNumber)
+    && hasLeftParenthesis) || ((indexRightParenthesis > indexFirstNumber
+    && indexRightParenthesis < indexLastNumber) && hasRightParenthesis)) {
 
     showError();
 
@@ -673,9 +679,9 @@ function performSecondOperation(e) {
   
   const operatorInArr = output.findOperator();
   
-  const hasOperand = (typeof output.inputArr.at(2) === 'number') ||
-    (typeof output.inputArr.at(3) === 'number') ||
-    (typeof output.inputArr.at(4) === 'number');
+  const hasOperand = (typeof output.inputArr.at(2) === 'number')
+    || (typeof output.inputArr.at(3) === 'number')
+    || (typeof output.inputArr.at(4) === 'number');
   
   const rightOperand = mathOperations.getRightOperand();
 
@@ -743,8 +749,8 @@ function checkMinusForSecondOperation(operation) {
 
   const checkMinus = charAfterOperator.at(1) === '-';
 
-  if ((operator === '-') && (!mathOperations.secondOperationState) &&
-    leftParenthesis && checkMinus) {
+  if ((operator === '-') && (!mathOperations.secondOperationState)
+    && leftParenthesis && checkMinus) {
 
     mathOperations.secondOperationState = true;
 
@@ -789,8 +795,8 @@ function checkRightOperand() {
   const hasRightParenthesis = charAfterOperator.some((item) =>
     item === ')');
 
-  if (((indexLeftParenthesis > indexFirstNumber) && hasLeftParenthesis) ||
-    ((indexRightParenthesis < indexFirstNumber) && hasRightParenthesis)) {
+  if (((indexLeftParenthesis > indexFirstNumber) && hasLeftParenthesis)
+    || ((indexRightParenthesis < indexFirstNumber) && hasRightParenthesis)) {
 
     showError();
 
@@ -801,10 +807,9 @@ function checkRightOperand() {
   const indexLastNumber = charAfterOperator.findLastIndex(
     (item) => typeof item === 'number');
   
-  if (((indexLeftParenthesis < indexFirstNumber &&
-    indexLeftParenthesis > indexLastNumber) && hasLeftParenthesis) ||
-    ((indexRightParenthesis > indexFirstNumber &&
-      indexRightParenthesis < indexLastNumber) && hasRightParenthesis)) {
+  if (((indexLeftParenthesis < indexFirstNumber && indexLeftParenthesis > indexLastNumber)
+    && hasLeftParenthesis) || ((indexRightParenthesis > indexFirstNumber
+    && indexRightParenthesis < indexLastNumber) && hasRightParenthesis)) {
 
     showError();
 
