@@ -204,8 +204,12 @@ const output = {
 
       let lengthOutput = outputPara.textContent.length;
 
-      if (lengthOutput < 15) this.inputArr.push(Number
-        (digit));
+      if (lengthOutput < 31) {
+
+
+        this.inputArr.push(Number(digit));
+
+      };
     
     };
 

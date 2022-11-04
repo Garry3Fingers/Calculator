@@ -18,8 +18,8 @@ body {
   display: flex;
   flex-direction: column;
   border: 1px solid black;
-  height: 250px;
-  width: 220px; 
+  height: 280px;
+  width: 220px;
   padding: 20px;
 }
 
@@ -28,8 +28,12 @@ body {
   justify-content: flex-end;
 }
 
-p {
+.output-container p {
+  height: 60px;
   font-size: 23px;
+  max-width: 180px;
+  overflow-wrap: anywhere;
+  line-height: 80%;
 }
 
 button {
@@ -40,7 +44,7 @@ button {
 .main-buttons-container {
   display: flex;
   height: 200px;
-  width: 180px; 
+  width: 180px;
 }
 
 .buttons-container {
