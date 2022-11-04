@@ -16,7 +16,7 @@ const minusBtn = document.querySelector('.minus-btn');
 
 const plusBtn = document.querySelector('.plus-btn');
 
-const evenBtn = document.querySelector('.even-btn');
+const equalBtn = document.querySelector('.even-btn');
 
 const periodBtn = document.querySelector('.period-btn');
 
@@ -76,11 +76,11 @@ const output = {
 
     const hasLeftParenthesis = (this.inputArr.at(-1) === `\(`);
 
-    if (mathOperations.evenState) {
+    if (mathOperations.equalState) {
 
       this.inputArr.length = 0;
       
-      mathOperations.evenState = false;
+      mathOperations.equalState = false;
 
       this.inputArr.push(0, '.');
 
@@ -123,7 +123,7 @@ const output = {
 
     mathOperations.addMinusState = false;
 
-    mathOperations.evenState = false;
+    mathOperations.equalState = false;
 
     this.inputArr.length = 0;
 
@@ -135,7 +135,7 @@ const output = {
 
   undoLastCharacter() { 
 
-    if (mathOperations.evenState) return;
+    if (mathOperations.equalState) return;
 
     const isOperator = this.checkOperator();
 
@@ -151,6 +151,12 @@ const output = {
 
       this.inputArr.pop();
 
+      if (!this.checkOperator()) {
+        
+        mathOperations.firstOperationState = false;
+
+      };
+
     } else {
 
       mathOperations.firstOperationState = false;
@@ -159,16 +165,17 @@ const output = {
 
       this.inputArr = [...currentInput];
 
-      this.inputArr.pop();
+      if ((this.inputArr.at(0) === '(') &&
+        (this.inputArr.at(1) === '-')) {
 
-      console.log(`result: ${currentInput}`);
-            
-      console.log(`slice: ${this.inputArr}`);
+        mathOperations.addMinusState = false;
+
+      };
+        
+      this.inputArr.pop();
 
       mathOperations.numbers.pop();
 
-      console.log(`undo: ${this.inputArr} number: ${mathOperations.numbers}`);
-    
     };
 
     if (this.inputArr.toString() === '') {
@@ -185,25 +192,35 @@ const output = {
 
   getDigits(e) {
 
-    if (mathOperations.evenState) {
+    const digit = (e.type === 'click') ? e.target.textContent : e.key;
+
+    if (mathOperations.equalState) {
 
       clearAfterEven();
 
-      this.inputArr.push(Number(e.target.textContent));
-
-      this.showOutput()
+      this.inputArr.push(Number(digit));
 
     } else {
 
       let lengthOutput = outputPara.textContent.length;
 
       if (lengthOutput < 15) this.inputArr.push(Number
-        (e.target.textContent));
+        (digit));
     
     };
 
+    this.showOutput();
+
   },
-  
+
+  getOperator(e) { 
+
+    const operator = (e.type === 'click') ? e.target.value : e.key;
+
+    return operator;
+
+  },
+
   changeOperator(e) { 
 
     const hasOperator = this.checkOperator();
@@ -221,7 +238,7 @@ const output = {
 
           const operatorInArr = this.findOperator();
 
-          let operator = e.target.value;
+          let operator = this.getOperator(e);
 
           if (operator === '/') {
 
@@ -233,7 +250,7 @@ const output = {
 
           } else {
 
-            operator = ` ${e.target.value} `;
+            operator = ` ${operator} `;
 
           };
 
@@ -255,7 +272,7 @@ const output = {
 
   addLeftParenthesis() {
 
-    if (mathOperations.evenState) {
+    if (mathOperations.equalState) {
 
       clearAfterEven();
 
@@ -278,7 +295,7 @@ const output = {
 
   addRightParenthesis() {
 
-    if (mathOperations.evenState) {
+    if (mathOperations.equalState) {
 
       clearAfterEven();
 
@@ -303,7 +320,7 @@ const output = {
 
 function clearAfterEven() { 
 
-  mathOperations.evenState = false;
+  mathOperations.equalState = false;
 
   output.inputArr.length = 0;
 
@@ -343,16 +360,6 @@ digitsBtn.forEach((btn) => {
 
 });
 
-digitsBtn.forEach((btn) => { 
-
-  btn.addEventListener('click', () => {
-    
-    output.showOutput();
-  
-  });
-
-});
-
 periodBtn.addEventListener('click', () => { 
 
   output.addPeriod();
@@ -375,11 +382,7 @@ mathBtn.forEach((btn) => {
   
   btn.addEventListener('click', () => { 
 
-    if (mathOperations.evenState) { 
-
-      mathOperations.evenState = false;
-
-    };
+    mathOperations.handleEqualState();
 
   });
 
@@ -395,11 +398,21 @@ const mathOperations = {
 
   addMinusState: false,
 
-  evenState: false,
+  equalState: false,
 
   firstOperationState: false,
 
   secondOperationState: false,
+
+  handleEqualState() { 
+
+    if (this.equalState) {
+
+      this.equalState = false;
+
+    };
+
+  },
 
   getLeftOperand() {
 
@@ -466,7 +479,7 @@ const mathOperations = {
 
       this.addMinusState = false;
 
-      this.evenState = true;
+      this.equalState = true;
 
       outputPara.textContent = 'Division on zero!';
 
@@ -590,7 +603,7 @@ function showError() {
 
   mathOperations.addMinusState = false;
 
-  mathOperations.evenState = false;
+  mathOperations.equalState = false;
 
   outputPara.textContent = 'Error';
 
@@ -598,9 +611,9 @@ function showError() {
  
 function performFirstOperation(e) { 
 
-  if (mathOperations.firstOperationState) return;
+  if (mathOperations.firstOperationState) return; 
 
-  const operator = e.target.value;
+  const operator = output.getOperator(e);
 
   const checkBeforeExecution = checkBeforeFirstOperation(operator);
 
@@ -615,8 +628,6 @@ function performFirstOperation(e) {
     const leftOperand = mathOperations.getLeftOperand();
 
     mathOperations.numbers.push(leftOperand);
-
-    console.log(`first: ${mathOperations.numbers}`)
     
     output.inputArr.length = 0;
 
@@ -649,8 +660,8 @@ mathBtn.forEach((btn) => {
 });
 
 function performSecondOperation(e) { 
-
-  const operator = e.target.value;
+  
+  const operator = output.getOperator(e);
 
   const checkMinus = checkMinusForSecondOperation(operator);
 
@@ -766,23 +777,17 @@ function checkRightOperand() {
   const indexLeftParenthesis = charAfterOperator.findIndex(
     (item) => item === '(');
 
-  console.log(`lIn: ${indexLeftParenthesis}`);
-
   const indexRightParenthesis = charAfterOperator.findIndex(
     (item) => item === ')');
 
   const indexFirstNumber = charAfterOperator.findIndex(
     (item) => typeof item === 'number');
 
-  console.log(`NIn: ${indexFirstNumber}`);
-
   const hasLeftParenthesis = charAfterOperator.some((item) =>
     item === '(');
 
   const hasRightParenthesis = charAfterOperator.some((item) =>
     item === ')');
-
-  console.log(indexLeftParenthesis > indexFirstNumber)
 
   if (((indexLeftParenthesis > indexFirstNumber) && hasLeftParenthesis) ||
     ((indexRightParenthesis < indexFirstNumber) && hasRightParenthesis)) {
@@ -809,9 +814,9 @@ function checkRightOperand() {
 
 };
 
-evenBtn.addEventListener('click', calculateEvenOperation);
+equalBtn.addEventListener('click', calculateEqualOperation);
 
-function calculateEvenOperation() { 
+function calculateEqualOperation() { 
 
   const checkError = checkRightOperand();
 
@@ -835,7 +840,7 @@ function calculateEvenOperation() {
 
     mathOperations.addMinusState = false;
     
-    mathOperations.evenState = true;
+    mathOperations.equalState = true;
 
     output.showOutput();
 
@@ -851,27 +856,22 @@ function calculateEvenOperation() {
 
   } else {
 
-    console.log(`even operator: ${operator}`);
-
     const rightOperand = mathOperations.getRightOperand();
 
     switch (true) {
 
       case (operator === ' + '):
         mathOperations.numbers.push(rightOperand);
-        console.log(` even math: ${mathOperations.numbers}`);
         mathOperations.addition();
         break;
     
       case (operator === ' - '):
         mathOperations.numbers.push(rightOperand);
-        console.log(` even math: ${mathOperations.numbers}`);
         mathOperations.subtraction();
         break;
     
       case (operator === ' ÷ '):
         mathOperations.numbers.push(rightOperand);
-        console.log(` even math: ${mathOperations.numbers}`);
         const hasZero = mathOperations.divisionOnZero();
         if (hasZero) return;
         mathOperations.division();
@@ -879,7 +879,6 @@ function calculateEvenOperation() {
     
       case (operator === ' x '):
         mathOperations.numbers.push(rightOperand);
-        console.log(` even math: ${mathOperations.numbers}`);
         mathOperations.multiplication();
         break;
     
@@ -888,8 +887,6 @@ function calculateEvenOperation() {
     output.inputArr.length = 0;
 
     output.inputArr.push(mathOperations.result);
-
-    console.log(`even: ${output.inputArr}`);
 
     mathOperations.numbers.length = 0;
 
@@ -901,6 +898,58 @@ function calculateEvenOperation() {
 
   mathOperations.addMinusState = false;
 
-  mathOperations.evenState = true;
+  mathOperations.equalState = true;
     
 };
+
+// Keyboard support
+
+window.addEventListener('keydown', (e) => { 
+  
+  switch (true) { 
+
+    case (e.key === '('):
+      output.addLeftParenthesis();
+      break;
+    
+    case (e.key === ')'):
+      output.addRightParenthesis();
+      break;
+
+    case(e.key === '+' || e.key === '-'
+      || e.key === '*' || e.key === '/'):
+      output.changeOperator(e);
+      performFirstOperation(e);
+      // The method addMinus must be after performFirstOperation
+      // and before performSecondOperation
+      output.addMinus();
+      performSecondOperation(e);
+      mathOperations.handleEqualState();
+      break;
+
+    case(e.code >= 'Digit0' && e.code <= 'Digit9'):
+      output.getDigits(e);
+      break;
+    
+    case(e.key === '='):
+      calculateEqualOperation();
+      break;
+    
+    case(e.code === 'Period'):
+      output.addPeriod();
+      break;
+    
+    case(e.code === 'KeyD'):
+      output.undoLastCharacter();
+      break;
+    
+    case(e.code === 'KeyC'):
+      output.clearAll();
+      break;
+    
+    default:
+      return;
+
+  };
+
+});

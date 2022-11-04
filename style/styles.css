@@ -30,8 +30,6 @@ body {
 
 p {
   font-size: 23px;
-  /* text-align: right; */
-  /* align-self: flex-end; */
 }
 
 button {
@@ -50,9 +48,3 @@ button {
   flex-flow: row wrap;
   place-content: space-between space-between;
 }
-
-/* .right-buttons-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-} */
