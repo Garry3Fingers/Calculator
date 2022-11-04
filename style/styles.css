@@ -21,24 +21,40 @@ body {
   height: 280px;
   width: 220px;
   padding: 20px;
+  background-color: #558df2;
+  border-radius: 13%;
 }
 
 .output-container p {
   display: flex;
   justify-content: flex-end;
-}
-
-.output-container p {
+  align-items: flex-end;
   height: 60px;
-  font-size: 23px;
+  font-size: 25px;
   max-width: 180px;
   overflow-wrap: anywhere;
   line-height: 80%;
+  background-color: #d1c5c5;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  padding: 5px 10px;
+  border: 2px solid #9f8282;
 }
 
 button {
   height: 25px;
   width: 38px;
+  border-radius: 20%/30%;
+  border: 1px solid black;
+}
+
+button:hover {
+  background-color: #dffff8;
+  
+}
+
+button:active {
+  border: 2px solid black;
 }
 
 .main-buttons-container {
@@ -51,4 +67,33 @@ button {
   display: flex;
   flex-flow: row wrap;
   place-content: space-between space-between;
+}
+
+.clear-btn {
+  background-color: #ff3333;
+}
+
+.undo-btn {
+  background-color: #8b7c7c;
+}
+
+.operation-btn {
+  background-color: #f9fa03;
+}
+
+.digits-btn {
+  background-color: #d09eff;
+}
+
+.left-parenthesis,
+.right-parenthesis {
+  background-color: #ffd469;
+}
+
+.equal-btn {
+  background-color: #46f882;
+}
+
+.period-btn {
+  background-color: #bfcdd9;
 }

@@ -16,7 +16,7 @@ const minusBtn = document.querySelector('.minus-btn');
 
 const plusBtn = document.querySelector('.plus-btn');
 
-const equalBtn = document.querySelector('.even-btn');
+const equalBtn = document.querySelector('.equal-btn');
 
 const periodBtn = document.querySelector('.period-btn');
 
@@ -204,7 +204,7 @@ const output = {
 
       let lengthOutput = outputPara.textContent.length;
 
-      if (lengthOutput < 31) {
+      if (lengthOutput < 18) {
 
 
         this.inputArr.push(Number(digit));
