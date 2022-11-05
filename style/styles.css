@@ -9,9 +9,10 @@
 
 body {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   height: 100vh;
+  background-color: honeydew;
 }
 
 .main-container {
@@ -96,4 +97,13 @@ button:active {
 
 .period-btn {
   background-color: #bfcdd9;
+}
+
+h2 {
+  font-size: 30px;
+}
+
+ul {
+  list-style-type: square;
+  font-size: 20px;
 }
