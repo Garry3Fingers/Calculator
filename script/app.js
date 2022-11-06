@@ -87,6 +87,7 @@ const output = {
     } else if ((this.inputArr.toString() === '')
       || (this.inputArr.at(0) === 0)
       || (this.inputArr.at(-1) === operator)
+      || ((this.inputArr.at(-2) === '(') && (this.inputArr.at(-1) === '-'))
       || hasLeftParenthesis) {
       
       this.inputArr.push(0, '.');
